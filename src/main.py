@@ -1,6 +1,7 @@
 from textnode import *
 from htmlnode import *
 from leafnode import *
+from parentnode import *
 
 def main():
     text_node = TextNode("This is a text node", "bold", "https://www.boot.dev")
@@ -20,4 +21,8 @@ def main():
 
     print(paragraph.to_html())
     print(anchor.to_html())
+
+    pn = ParentNode("span", [paragraph, anchor])
+    print(pn.to_html())
+
 main()
