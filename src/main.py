@@ -4,9 +4,21 @@ from leafnode import *
 from parentnode import *
 
 def main():
-    text_node = TextNode("This is a text node", "bold", "https://www.boot.dev")
+    bold_node = TextNode("This text is in bold", text_type_bold)
+    link_node = TextNode("Click the link!", text_type_link, "https://www.bbc.co.uk")
+    img_node = TextNode("What a nice picture", text_type_image, "https://pictures.org/nice_pic.jpg")
 
-    print(text_node)
+    print(bold_node)
+    print(link_node)
+    print(img_node)
+
+    print(text_node_to_html_node(bold_node))
+    print(text_node_to_html_node(link_node))
+    print(text_node_to_html_node(img_node))
+
+    print(text_node_to_html_node(bold_node).to_html())
+    print(text_node_to_html_node(link_node).to_html())
+    print(text_node_to_html_node(img_node).to_html())
 
     html_node = HTMLNode("p", "This is an HTML node", props = {"v1":"one", "v2":"two"})
 
