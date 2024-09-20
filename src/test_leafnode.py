@@ -44,5 +44,12 @@ class TestLeafNode(unittest.TestCase):
         html = node.to_html()
         self.assertEqual(html, "<tag first=\"one\" second=\"two\">Some value</tag>")
 
+    def test_value_missing(self):
+        node = LeafNode("tag", None)
+        with self.assertRaises(ValueError) as context:
+            node.to_html()
+
+        self.assertEqual(str(context.exception), "LeafNode requires a value")
+
 if __name__ == "__main__":
     unittest.main()
