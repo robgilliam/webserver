@@ -49,26 +49,6 @@ class TestHTMLNode(unittest.TestCase):
         node2 = HTMLNode("tag", "Some value", None, {"second": "two", "fiirst": "one"})
         self.assertEqual(node, node2)
 
-    # def test_eq_url(self):
-    #     node = TextNode("This is a text node", "bold", "https://bbc.co.uk/")
-    #     node2 = TextNode("This is a text node", "bold", "https://bbc.co.uk/")
-    #     self.assertEqual(node, node2)
-
-    # def test_not_eq_text(self):
-    #     node = TextNode("This is a text node", "bold")
-    #     node2 = TextNode("This is another text node", "bold")
-    #     self.assertNotEqual(node, node2)
-
-    # def test_not_eq_text_type(self):
-    #     node = TextNode("This is a text node", "bold")
-    #     node2 = TextNode("This is a text node", "italic")
-    #     self.assertNotEqual(node, node2)
-
-    # def test_not_eq_url(self):
-    #     node = TextNode("This is a text node", "bold", "https://bbc.co.uk/")
-    #     node2 = TextNode("This is a text node", "bold", "https://bbc.com/")
-    #     self.assertNotEqual(node, node2)
-
     def test_props_to_html(self):
         node = HTMLNode(props = { "p1":"one", "p2":"two", "p3":"three"})
         html = node.props_to_html()
