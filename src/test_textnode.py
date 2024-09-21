@@ -86,5 +86,26 @@ class TestTextNode(unittest.TestCase):
             TextNode(" in it", text_type_text, None)
         ])
 
+
+    def test_split_nodes_image(self):
+        nodes = [TextNode("This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)")]
+        new_nodes = split_nodes_image(nodes)
+        self.assertEqual(new_nodes, [
+            TextNode("This is text with a ", text_type_text, None),
+            TextNode("rick roll", text_type_image, "https://i.imgur.com/aKaOqIh.gif"),
+            TextNode(" and ", text_type_text, None),
+            TextNode("obi wan", text_type_image, "https://i.imgur.com/fJRm4Vk.jpeg")
+        ])
+
+    def test_split_nodes_link(self):
+        nodes = [TextNode("This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)", text_type_text)]
+        new_nodes = split_nodes_link(nodes)
+        self.assertEqual(new_nodes, [
+            TextNode("This is text with a link ", text_type_text, None),
+            TextNode("to boot dev", text_type_link, "https://www.boot.dev"),
+            TextNode(" and ", text_type_text, None),
+            TextNode("to youtube", text_type_link, "https://www.youtube.com/@bootdotdev")
+        ])
+
 if __name__ == "__main__":
     unittest.main()

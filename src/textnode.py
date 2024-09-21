@@ -1,3 +1,5 @@
+from extractor import *
+
 from leafnode import *
 
 text_type_text = "text"
@@ -40,9 +42,71 @@ def split_nodes_delimiter(nodes, delimiter, text_type):
 	new_nodes = []
 
 	for node in nodes:
-		texts = node.text.split(delimiter)
-		new_nodes.append(TextNode(texts[0], text_type_text))
-		new_nodes.append(TextNode(texts[1], text_type))
-		new_nodes.append(TextNode(texts[2], text_type_text))
+		if node.text_type != text_type_text:
+			new_nodes.append(node)
+			continue
+
+		sections = node.text.split(delimiter)
+		if len(sections) % 2 == 0:
+			raise ValueError("Invalid markdown, formatted section not closed")
+		for i in range(len(sections)):
+			if sections[i] == "":
+				continue
+			new_nodes.append(TextNode(sections[i], text_type_text if i % 2 == 0 else text_type))
+
+	return new_nodes
+
+def split_nodes_link(nodes):
+	new_nodes = []
+
+	for node in nodes:
+		if node.text_type != text_type_text:
+			new_nodes.append(node)
+			continue
+
+		text = node.text
+		links = extract_markdown_links(node.text)
+		if len(links) == 0:
+			new_nodes.append(node)
+			continue
+		for (link_text, url) in links:
+			sections = text.split(f"[{link_text}]({url})", 1)
+			if len(sections) != 2:
+				raise ValueError("Invalid markdown, link section not closed")
+			if sections[0] != "":
+				new_nodes.append(TextNode(sections[0], text_type_text))
+			new_nodes.append(TextNode(link_text, text_type_link, url))
+			text = sections[1]
+
+		if text != "":
+			new_nodes.append(TextNode(text, text_type_text))
+
+	return new_nodes
+
+
+def split_nodes_image(nodes):
+	new_nodes = []
+
+	for node in nodes:
+		if node.text_type != text_type_text:
+			new_nodes.append(node)
+			continue
+
+		text = node.text
+		images = extract_markdown_images(node.text)
+		if len(images) == 0:
+			new_nodes.append(node)
+			continue
+		for (alt_text, src) in images:
+			sections = text.split(f"![{alt_text}]({src})", 1)
+			if len(sections) != 2:
+				raise ValueError("Invalid markdown, image section not closed")
+			if sections[0] != "":
+				new_nodes.append(TextNode(sections[0], text_type_text))
+			new_nodes.append(TextNode(alt_text, text_type_image, src))
+			text = sections[1]
+
+		if text != "":
+			new_nodes.append(TextNode(text, text_type_text))
 
 	return new_nodes
