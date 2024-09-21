@@ -107,5 +107,36 @@ class TestTextNode(unittest.TestCase):
             TextNode("to youtube", text_type_link, "https://www.youtube.com/@bootdotdev")
         ])
 
+    def test_text_to_text_nodes(self):
+        text = """This is some text
+This is some *italic text*
+This is some **bold text**
+This is some `embedded code`
+This is some more text
+This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)
+Here are some pictures: ![rick roll](https://i.imgur.com/aKaOqIh.gif)![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)
+Goodbye!
+"""
+        nodes = text_to_textnodes(text)
+        expected_nodes = [
+            TextNode("This is some text\nThis is some ", text_type_text),
+            TextNode("italic text", text_type_italic),
+            TextNode("\nThis is some ", text_type_text),
+            TextNode("bold text", text_type_bold),
+            TextNode("\nThis is some ", text_type_text),
+            TextNode("embedded code", text_type_code),
+            TextNode("\nThis is some more text\nThis is text with a link ", text_type_text),
+            TextNode("to boot dev", text_type_link, "https://www.boot.dev"),
+            TextNode(" and ", text_type_text),
+            TextNode("to youtube", text_type_link, "https://www.youtube.com/@bootdotdev"),
+            TextNode("\nHere are some pictures: ", text_type_text),
+            TextNode("rick roll", text_type_image, "https://i.imgur.com/aKaOqIh.gif"),
+            TextNode("obi wan", text_type_image, "https://i.imgur.com/fJRm4Vk.jpeg"),
+            TextNode("\nGoodbye!\n", text_type_text),
+        ]
+
+        self.assertEqual(nodes, expected_nodes)
+
+
 if __name__ == "__main__":
     unittest.main()
