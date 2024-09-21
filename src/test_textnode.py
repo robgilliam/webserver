@@ -59,5 +59,32 @@ class TestTextNode(unittest.TestCase):
         expected_node = LeafNode("img", "", {"src": "http://dogpics.org/poodle.jpg", "alt": "A picture of a poodle"})
         self.assertEqual(text_node_to_html_node(text_node), expected_node)
 
+    def test_split_nodes_delimiter_bold(self):
+        nodes = [TextNode("This node has **bold text** in it")]
+        new_nodes = split_nodes_delimiter(nodes, "**", text_type_bold)
+        self.assertEqual(new_nodes, [
+            TextNode("This node has ", text_type_text, None),
+            TextNode("bold text", text_type_bold, None),
+            TextNode(" in it", text_type_text, None)
+        ])
+
+    def test_split_nodes_delimiter_italic(self):
+        nodes = [TextNode("This node has *italicised text* in it")]
+        new_nodes = split_nodes_delimiter(nodes, "*", text_type_italic)
+        self.assertEqual(new_nodes, [
+            TextNode("This node has ", text_type_text, None),
+            TextNode("italicised text", text_type_italic, None),
+            TextNode(" in it", text_type_text, None)
+        ])
+
+    def test_split_nodes_delimiter_code(self):
+        nodes = [TextNode("This node has `embedded code` in it")]
+        new_nodes = split_nodes_delimiter(nodes, "`", text_type_code)
+        self.assertEqual(new_nodes, [
+            TextNode("This node has ", text_type_text, None),
+            TextNode("embedded code", text_type_code, None),
+            TextNode(" in it", text_type_text, None)
+        ])
+
 if __name__ == "__main__":
     unittest.main()

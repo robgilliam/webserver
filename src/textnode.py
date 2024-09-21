@@ -8,7 +8,7 @@ text_type_link = "link"
 text_type_image = "image"
 
 class TextNode:
-	def __init__(self, text, text_type, url = None):
+	def __init__(self, text, text_type = text_type_text, url = None):
 			self.text = text
 			self.text_type = text_type
 			self.url = url
@@ -35,3 +35,14 @@ def text_node_to_html_node(text_node):
 	if text_node.text_type == text_type_image:
 		return LeafNode("img", "", {"src": text_node.url, "alt": text_node.text})
 	raise ValueError(f"Invalid text type {text_node.text_type}")
+
+def split_nodes_delimiter(nodes, delimiter, text_type):
+	new_nodes = []
+
+	for node in nodes:
+		texts = node.text.split(delimiter)
+		new_nodes.append(TextNode(texts[0], text_type_text))
+		new_nodes.append(TextNode(texts[1], text_type))
+		new_nodes.append(TextNode(texts[2], text_type_text))
+
+	return new_nodes
