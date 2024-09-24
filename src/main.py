@@ -5,6 +5,8 @@ from parentnode import *
 
 from extractor import *
 
+from block import markdown_to_blocks
+
 def main():
     # bold_node = TextNode("This text is in bold", text_type_bold)
     # link_node = TextNode("Click the link!", text_type_link, "https://www.bbc.co.uk")
@@ -48,20 +50,32 @@ def main():
     # node = TextNode("This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)")
     # print(split_nodes_image([node]))
 
-    text = """
-This is some text
-This is some **bold text**
-This is some *italic text*
-This is some `embedded code`
-This is some more text
-This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)
-This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)
-"""
+    text = """# This is a heading
+
+This is a paragraph of text. It has some **bold** and *italic* words inside of it.
+
+* This is the first list item in a list block
+* This is a list item
+* This is another list item
+
+For some reason, this block is followed by two blank lines
+
+
+And now a block followed by 3 blank lines
+
+
+
+And then four:
+
+
+
+
+The end."""
 
     print(text)
 
-    nodes = text_to_textnodes(text)
+    blocks = markdown_to_blocks(text)
 
-    print(nodes)
+    print(blocks)
 
 main()
