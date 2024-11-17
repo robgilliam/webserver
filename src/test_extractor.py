@@ -18,3 +18,45 @@ class TestExtractor(unittest.TestCase):
             ("to boot dev", "https://www.boot.dev"),
             ("to youtube", "https://www.youtube.com/@bootdotdev")
         ])
+
+    def test_extract_title_happy_path(self):
+        test_markdown = "# Richard III"
+
+        title = extract_title(test_markdown)
+        self.assertEqual(title, "Richard III")
+
+    def test_extract_title_other_lines(self):
+        test_markdown = "# Richard III\nNow is the winter of our discontent"
+
+        title = extract_title(test_markdown)
+        self.assertEqual(title, "Richard III")
+
+    def test_extract_title_not_first_line(self):
+        test_markdown = "By William Shakespeare\n# Richard III"
+
+        title = extract_title(test_markdown)
+        self.assertEqual(title, "Richard III")
+
+    def test_extract_title_no_title(self):
+        test_markdown = "Now is the winter of our discontent"
+
+        with self.assertRaises(ValueError) as context:
+            extract_title(test_markdown)
+
+        self.assertEqual(str(context.exception), "No title found")
+
+    def test_extract_title_no_space(self):
+        test_markdown = "#Richard III"
+
+        with self.assertRaises(ValueError) as context:
+            extract_title(test_markdown)
+
+        self.assertEqual(str(context.exception), "No title found")
+
+    def test_extract_title_bad_level(self):
+        test_markdown = "##Richard III"
+
+        with self.assertRaises(ValueError) as context:
+            extract_title(test_markdown)
+
+        self.assertEqual(str(context.exception), "No title found")
